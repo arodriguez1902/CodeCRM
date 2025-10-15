@@ -1,0 +1,35 @@
+# .NET
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Entity Framework
+**/Migrations/
+
+# Configuración
+**/appsettings.Development.json
+**/appsettings.Secrets.json
+
+# Logs
+logs/
+*.log
+
+# VS Code
+.vscode/
+
+# NuGet
+**/packages/
+*.nupkg
+
+# VS
+*.vs/
+
+# MacOS
+.DS_Store
+
+# Archivos de build
+**/build/
+**/publish/
