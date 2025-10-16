@@ -23,6 +23,9 @@ namespace CRM.Application.Interfaces
         Task<IEnumerable<User>> GetUsersWithRolesAsync();
         Task<Account?> GetAccountWithDetailsAsync(int id);
         Task<Contact?> GetContactWithDetailsAsync(int id);
+        Task<IEnumerable<Contact>> GetContactsWithDetailsAsync();
+        Task<IEnumerable<Contact>> GetContactsByAccountWithDetailsAsync(int accountId);
+        Task<IEnumerable<Contact>> GetContactsByAssignedUserWithDetailsAsync(int userId);
 
         Task<int> CompleteAsync();
     }

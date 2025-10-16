@@ -90,16 +90,64 @@ namespace CRM.Infrastructure.Repositories
 
         public async Task<Contact?> GetContactWithDetailsAsync(int id)
         {
-            return await _contacts.GetByIdWithIncludeAsync(id,
+            try
+            {
+                // Asegurar que _contacts está inicializado
+                var contactsRepo = _contacts ??= new GenericRepository<Contact>(_context);
+                
+                Console.WriteLine($"DEBUG - Repository inicializado: {contactsRepo != null}");
+                
+                var contact = await contactsRepo.GetByIdWithIncludeAsync(id,
+                    c => c.Account!,
+                    c => c.AssignedToUser!,
+                    c => c.CreatedByUser!
+                );
+                
+                Console.WriteLine($"DEBUG - Contacto encontrado: {contact != null}");
+                return contact;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DEBUG - ERROR: {ex.Message}");
+                Console.WriteLine($"DEBUG - INNER: {ex.InnerException?.Message}");
+                throw;
+            }
+        }
+
+        public async Task<int> CompleteAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+
+
+        // Agregar estos métodos a la clase UnitOfWork:
+                public async Task<IEnumerable<Contact>> GetContactsWithDetailsAsync()
+        {
+            return await _contacts.GetAllWithIncludeAsync(
                 c => c.Account!,
                 c => c.AssignedToUser!,
                 c => c.CreatedByUser!
             );
         }
 
-        public async Task<int> CompleteAsync()
+        public async Task<IEnumerable<Contact>> GetContactsByAccountWithDetailsAsync(int accountId)
         {
-            return await _context.SaveChangesAsync();
+            return await _contacts.FindWithIncludeAsync(
+                c => c.AccountId == accountId,
+                c => c.Account!,
+                c => c.AssignedToUser!,
+                c => c.CreatedByUser!
+            );
+        }
+
+        public async Task<IEnumerable<Contact>> GetContactsByAssignedUserWithDetailsAsync(int userId)
+        {
+            return await _contacts.FindWithIncludeAsync(
+                c => c.AssignedToUserId == userId,
+                c => c.Account!,
+                c => c.AssignedToUser!,
+                c => c.CreatedByUser!
+            );
         }
 
         public void Dispose()

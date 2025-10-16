@@ -12,6 +12,7 @@ namespace CRM.Application.DependencyInjection
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ILeadService, LeadService>();
+            services.AddScoped<IContactService, ContactService>();
             return services;
         }
     }
